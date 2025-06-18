@@ -1,12 +1,15 @@
-from fastapi import FastAPI, UploadFile, File
-from rag.ingest.ingest  import ingest_pdf
+from sqlalchemy import select
+from rag.db import SessionLocal
+from rag.models import Document
+from rag.ingest import embed_text
 
-app = FastAPI()
-
-@app.post("/upload/")
-async def upload_pdf(file: UploadFile = File(...)):
-    path = f"/tmp/{file.filename}"
-    with open(path, "wb") as f:
-        f.write(await file.read())
-    ingest_pdf(path, file.filename)
-    return {"status": "uploaded"}
+def query_similar_documents(query, top_k=5):
+    embedding = embed_text(query)
+    session = SessionLocal()
+    docs = session.execute(
+        select(Document)
+        .order_by(Document.embedding.l2_distance(embedding))
+        .limit(top_k)
+    ).scalars().all()
+    session.close()
+    return docs
