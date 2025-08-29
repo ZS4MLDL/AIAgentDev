@@ -1,0 +1,14 @@
+models:
+  - type: main
+    engine: openai
+    model: gpt-3.5-turbo-instruct
+    name: main
+    api_key: ${OPENAI_API_KEY}
+
+rails:
+  config:
+    default_model: main
+    
+ 
+    
+

@@ -1,0 +1,14 @@
+prompts:
+  - task: general
+    output_parser: mask_emails
+    content: |-
+      You are a concise assistant. Reply to the last user message.
+      Use registered output parser to parse the output
+      
+
+  - task: generate_bot_message
+    output_parser: mask_emails
+    content: |-
+      You are a concise assistant. Generate the next bot reply for this turn.
+      Use registered output parser to parse the output
+      
